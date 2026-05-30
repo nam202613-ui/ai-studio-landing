@@ -57,7 +57,7 @@ function App() {
       {isLanding && (
         <>
           <div className="fixed inset-0 z-0">
-            <PrismaticBurst intensity={1.5} speed={0.3} animationType="rotate3d" distort={0} rayCount={0} mixBlendMode="screen" />
+            <PrismaticBurst intensity={3} speed={0.35} mixBlendMode="screen" />
           </div>
           <div className="fixed inset-0 z-[1] bg-gradient-to-b from-transparent via-[#120F17]/40 to-[#120F17] pointer-events-none" />
         </>
