@@ -57,9 +57,9 @@ function App() {
       {isLanding && (
         <>
           <div className="fixed inset-0 z-0">
-            <PrismaticBurst intensity={2} speed={0.35} mixBlendMode="screen" />
+            <PrismaticBurst intensity={1.8} speed={0.35} mixBlendMode="screen" />
           </div>
-          <div className="fixed inset-0 z-[1] pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(18,15,23,0.3) 0%, rgba(18,15,23,0.7) 50%, rgba(18,15,23,0.95) 100%)'}} />
+          <div className="fixed inset-0 z-[1] pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(18,15,23,0.5) 0%, rgba(18,15,23,0.85) 40%, rgba(18,15,23,0.98) 100%)'}} />
         </>
       )}
 
