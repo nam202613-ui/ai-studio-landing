@@ -51,10 +51,7 @@ const PROVIDER_LOGOS = {
 
 const AI_PROVIDERS = [
   {
-    id: 'openai',
-    name: 'OpenAI',
-    logo: PROVIDER_LOGOS.openai,
-    color: '#10a37f',
+    id: 'openai', name: 'OpenAI', logo: PROVIDER_LOGOS.openai, color: '#10a37f',
     models: [
       { id: 'gpt-5.5-mini', name: 'GPT-5.5 Mini', desc: 'Mini dòng 5.5 — nhanh, rẻ, phù hợp ...', badge: '⚡' },
       { id: 'gpt-5', name: 'GPT-5', desc: 'Reasoning mạnh mẽ, 400K context ...' },
@@ -74,10 +71,7 @@ const AI_PROVIDERS = [
     ]
   },
   {
-    id: 'google',
-    name: 'Google',
-    logo: PROVIDER_LOGOS.google,
-    color: '#4285F4',
+    id: 'google', name: 'Google', logo: PROVIDER_LOGOS.google, color: '#4285F4',
     models: [
       { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', desc: 'Mô hình mạnh nhất của Google', badge: '⭐' },
       { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', desc: 'Nhanh, miễn phí, tốt cho chat' },
@@ -85,10 +79,7 @@ const AI_PROVIDERS = [
     ]
   },
   {
-    id: 'anthropic',
-    name: 'Claude',
-    logo: PROVIDER_LOGOS.anthropic,
-    color: '#d97757',
+    id: 'anthropic', name: 'Claude', logo: PROVIDER_LOGOS.anthropic, color: '#d97757',
     models: [
       { id: 'claude-opus-4', name: 'Claude Opus 4', desc: 'Mô hình mạnh nhất, suy luận sâu', badge: '⭐' },
       { id: 'claude-sonnet-4', name: 'Claude Sonnet 4', desc: 'Cân bằng giữa tốc độ và chất lượng' },
@@ -97,10 +88,7 @@ const AI_PROVIDERS = [
     ]
   },
   {
-    id: 'xai',
-    name: 'xAI',
-    logo: PROVIDER_LOGOS.xai,
-    color: '#1d1d1f',
+    id: 'xai', name: 'xAI', logo: PROVIDER_LOGOS.xai, color: '#1d1d1f',
     models: [
       { id: 'grok-3', name: 'Grok-3', desc: 'Mô hình mới nhất của xAI', badge: '⭐' },
       { id: 'grok-3-mini', name: 'Grok-3 Mini', desc: 'Nhanh, phù hợp chat thường ngày' },
@@ -108,20 +96,14 @@ const AI_PROVIDERS = [
     ]
   },
   {
-    id: 'perplexity',
-    name: 'Perplexity',
-    logo: PROVIDER_LOGOS.perplexity,
-    color: '#20b8cd',
+    id: 'perplexity', name: 'Perplexity', logo: PROVIDER_LOGOS.perplexity, color: '#20b8cd',
     models: [
       { id: 'sonar-pro', name: 'Sonar Pro', desc: 'Tìm kiếm real-time, citation rõ ràng', badge: '⭐' },
       { id: 'sonar', name: 'Sonar', desc: 'Tìm kiếm nhanh, miễn phí' },
     ]
   },
   {
-    id: 'deepseek',
-    name: 'DeepSeek AI',
-    logo: PROVIDER_LOGOS.deepseek,
-    color: '#0066ff',
+    id: 'deepseek', name: 'DeepSeek AI', logo: PROVIDER_LOGOS.deepseek, color: '#0066ff',
     models: [
       { id: 'deepseek-r1', name: 'DeepSeek R1', desc: 'Reasoning mạnh, mã nguồn mở', badge: '⭐' },
       { id: 'deepseek-v3', name: 'DeepSeek V3', desc: 'General purpose, nhanh' },
@@ -140,14 +122,14 @@ const SAMPLE_RESPONSES = [
 ];
 
 const ChatBot = () => {
+  const [conversations, setConversations] = useState([]);
+  const [activeChatId, setActiveChatId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [selectedProvider, setSelectedProvider] = useState(AI_PROVIDERS[0]);
   const [selectedModel, setSelectedModel] = useState(AI_PROVIDERS[0].models[0]);
   const [showModelPicker, setShowModelPicker] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [chatHistory, setChatHistory] = useState([]);
-  const [currentChatId, setCurrentChatId] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const messagesEndRef = useRef(null);
 
@@ -156,33 +138,61 @@ const ChatBot = () => {
   }, [messages]);
 
   const startNewChat = () => {
+    setActiveChatId(null);
     setMessages([]);
-    setCurrentChatId(null);
+  };
+
+  const loadChat = (chatId) => {
+    const chat = conversations.find(c => c.id === chatId);
+    if (chat) {
+      setActiveChatId(chatId);
+      setMessages(chat.messages);
+      setSelectedModel(AI_PROVIDERS.flatMap(p => p.models).find(m => m.id === chat.modelId) || AI_PROVIDERS[0].models[0]);
+    }
+  };
+
+  const deleteChat = (chatId, e) => {
+    e.stopPropagation();
+    setConversations(prev => prev.filter(c => c.id !== chatId));
+    if (activeChatId === chatId) {
+      setActiveChatId(null);
+      setMessages([]);
+    }
   };
 
   const handleSend = () => {
     if (!input.trim()) return;
 
-    if (!currentChatId) {
-      const chatId = Date.now();
-      setCurrentChatId(chatId);
-      setChatHistory(prev => [{
-        id: chatId,
-        title: input.trim().slice(0, 40) + (input.length > 40 ? '...' : ''),
-        model: selectedModel.name,
-        time: 'Vừa xong'
-      }, ...prev]);
-    }
-
     const userMsg = { role: 'user', content: input.trim() };
-    setMessages(prev => [...prev, userMsg]);
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
     setInput('');
     setIsTyping(true);
 
     setTimeout(() => {
       const response = SAMPLE_RESPONSES[Math.floor(Math.random() * SAMPLE_RESPONSES.length)];
-      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      const assistantMsg = { role: 'assistant', content: response };
+      const finalMessages = [...newMessages, assistantMsg];
+      setMessages(finalMessages);
       setIsTyping(false);
+
+      if (!activeChatId) {
+        const newChat = {
+          id: Date.now(),
+          title: input.trim().slice(0, 35) + (input.length > 35 ? '...' : ''),
+          modelId: selectedModel.id,
+          modelName: selectedModel.name,
+          providerName: selectedProvider.name,
+          time: 'Vừa xong',
+          messages: finalMessages,
+        };
+        setConversations(prev => [newChat, ...prev]);
+        setActiveChatId(newChat.id);
+      } else {
+        setConversations(prev => prev.map(c =>
+          c.id === activeChatId ? { ...c, messages: finalMessages } : c
+        ));
+      }
     }, 1000 + Math.random() * 1500);
   };
 
@@ -194,10 +204,12 @@ const ChatBot = () => {
 
   const hasMessages = messages.length > 0;
 
+  const ModelLogo = selectedProvider.logo;
+
   return (
     <div className="flex h-[calc(100vh-56px)]">
       {/* Left Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-0'} bg-[#0d0b12] border-r border-white/[0.06] flex-col transition-all duration-300 overflow-hidden hidden lg:flex shrink-0`}>
+      <aside className={`${sidebarOpen ? 'w-72' : 'w-0'} bg-[#0d0b12] border-r border-white/[0.06] flex flex-col transition-all duration-300 overflow-hidden shrink-0`}>
         {/* New Chat Button */}
         <div className="p-3 shrink-0">
           <button
@@ -211,11 +223,11 @@ const ChatBot = () => {
           </button>
         </div>
 
-        {/* Toggle Sidebar */}
-        <div className="px-3 mb-2">
+        {/* Sidebar Toggle */}
+        <div className="px-3 mb-1">
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-2 text-gray-500 hover:text-white hover:bg-white/[0.04] rounded-lg transition-colors"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-400 text-xs px-2 py-1.5 rounded-lg transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
@@ -225,43 +237,51 @@ const ChatBot = () => {
 
         {/* Chat History */}
         <div className="flex-1 overflow-y-auto px-2">
-          {chatHistory.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-center px-4">
-              <svg className="w-10 h-10 text-gray-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-              </svg>
+          {conversations.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 text-center px-4">
+              <div className="w-14 h-14 rounded-2xl bg-white/[0.04] flex items-center justify-center mb-4">
+                <svg className="w-7 h-7 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+              </div>
               <p className="text-gray-600 text-sm">Chưa có cuộc hội thoại nào</p>
             </div>
           ) : (
             <div className="space-y-0.5 py-1">
-              {chatHistory.map(chat => (
+              {conversations.map(chat => (
                 <button
                   key={chat.id}
-                  onClick={() => {
-                    setCurrentChatId(chat.id);
-                    setMessages([]);
-                  }}
-                  className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-colors ${
-                    currentChatId === chat.id
+                  onClick={() => loadChat(chat.id)}
+                  className={`group w-full text-left px-3 py-2.5 rounded-xl text-sm transition-colors relative ${
+                    activeChatId === chat.id
                       ? 'bg-white/[0.06] text-white'
                       : 'text-gray-500 hover:text-white hover:bg-white/[0.03]'
                   }`}
                 >
-                  <div className="truncate font-medium text-[13px]">{chat.title}</div>
-                  <div className="text-[11px] text-gray-600 mt-0.5">{chat.model} • {chat.time}</div>
+                  <div className="truncate font-medium text-[13px] pr-6">{chat.title}</div>
+                  <div className="text-[11px] text-gray-600 mt-0.5">{chat.modelName} • {chat.time}</div>
+                  <button
+                    onClick={(e) => deleteChat(chat.id, e)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
                 </button>
               ))}
             </div>
           )}
         </div>
-      </div>
+      </aside>
 
-      {/* Collapsed Sidebar Toggle (when closed) */}
+      {/* Collapsed Sidebar Toggle */}
       {!sidebarOpen && (
-        <div className="hidden lg:flex flex-col items-center py-3 px-1 bg-[#0d0b12] border-r border-white/[0.06]">
+        <div className="hidden lg:flex flex-col items-center py-3 px-1.5 bg-[#0d0b12] border-r border-white/[0.06] shrink-0">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 text-gray-500 hover:text-white hover:bg-white/[0.04] rounded-lg transition-colors mb-2"
+            className="p-2 text-gray-500 hover:text-white hover:bg-white/[0.04] rounded-lg transition-colors mb-1"
+            title="Mở sidebar"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
@@ -270,6 +290,7 @@ const ChatBot = () => {
           <button
             onClick={startNewChat}
             className="p-2 text-gray-500 hover:text-white hover:bg-white/[0.04] rounded-lg transition-colors"
+            title="Cuộc trò chuyện mới"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -299,10 +320,10 @@ const ChatBot = () => {
                 onClick={() => setShowModelPicker(!showModelPicker)}
                 className="flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.08] rounded-xl px-3 py-1.5 text-sm transition-colors"
               >
-                <span>{selectedProvider.logo ? <selectedProvider.logo /> : '⚙️'}</span>
+                <span className="text-gray-400"><ModelLogo /></span>
                 <span className="text-white font-medium">{selectedModel.name}</span>
                 {selectedModel.badge && <span className="text-xs">{selectedModel.badge}</span>}
-                <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className={`w-4 h-4 text-gray-500 transition-transform ${showModelPicker ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
               </button>
@@ -315,20 +336,23 @@ const ChatBot = () => {
                     {/* Providers List */}
                     <div className="w-36 border-r border-white/[0.06] p-2 shrink-0">
                       <div className="text-[10px] text-gray-600 font-bold uppercase tracking-wider px-3 py-2">Models</div>
-                      {AI_PROVIDERS.map(provider => (
-                        <button
-                          key={provider.id}
-                          onClick={() => setSelectedProvider(provider)}
-                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
-                            selectedProvider.id === provider.id
-                              ? 'bg-white/[0.08] text-white'
-                              : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                          }`}
-                        >
-                          <span className="text-gray-500">{provider.logo ? <provider.logo /> : '⚙️'}</span>
-                          <span className="truncate">{provider.name}</span>
-                        </button>
-                      ))}
+                      {AI_PROVIDERS.map(provider => {
+                        const ProviderLogo = provider.logo;
+                        return (
+                          <button
+                            key={provider.id}
+                            onClick={() => setSelectedProvider(provider)}
+                            className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
+                              selectedProvider.id === provider.id
+                                ? 'bg-white/[0.08] text-white'
+                                : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                            }`}
+                          >
+                            <span className="shrink-0"><ProviderLogo /></span>
+                            <span className="truncate text-[13px]">{provider.name}</span>
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {/* Models List */}
@@ -343,7 +367,7 @@ const ChatBot = () => {
                               : 'hover:bg-white/[0.04]'
                           }`}
                         >
-                          <span className="text-gray-500">{selectedProvider.logo ? <selectedProvider.logo /> : '⚙️'}</span>
+                          <span className="text-gray-500 shrink-0"><selectedProvider.logo /></span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5">
                               <span className="text-sm font-semibold text-white">{model.name}</span>
@@ -411,7 +435,7 @@ const ChatBot = () => {
                       : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]'
                   }`}
                 >
-                  <span className="text-gray-500 text-lg shrink-0">{model.providerLogo ? <model.providerLogo /> : '⚙️'}</span>
+                  <span className="text-gray-500 shrink-0">{model.providerLogo ? <model.providerLogo /> : '⚙️'}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
                       <span className="text-white font-semibold text-sm">{model.name}</span>
