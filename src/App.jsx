@@ -67,11 +67,16 @@ function App() {
       {isAppPage && (
         <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#0d0b12]/95 backdrop-blur-xl border-b border-white/[0.06] flex items-center px-4 gap-4">
           {/* Logo */}
-          <button onClick={() => navigateTo('home')} className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">AI</span>
-            </div>
-            <span className="text-white font-bold text-sm hidden sm:block">Studio</span>
+          <button onClick={() => navigateTo('home')} className="flex items-center shrink-0">
+            <svg viewBox="0 0 100 32" className="h-7" fill="none">
+              <g transform="translate(0, 0)">
+                <path d="M13 1L23 7V19L13 25L3 19V7L13 1Z" fill="#4F8AFF" />
+                <path d="M8 8L13 19L18 8" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+              </g>
+              <text x="28" y="19" fill="white" fontSize="14" fontWeight="800" fontFamily="Inter, sans-serif">
+                <tspan fill="#4F8AFF">O</tspan>video
+              </text>
+            </svg>
           </button>
 
           <div className="h-6 w-px bg-white/[0.08] shrink-0" />
