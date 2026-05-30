@@ -59,7 +59,7 @@ function App() {
           <div className="fixed inset-0 z-0">
             <PrismaticBurst intensity={2} speed={0.35} mixBlendMode="screen" />
           </div>
-          <div className="fixed inset-0 z-[1] bg-gradient-to-b from-transparent via-[#120F17]/40 to-[#120F17] pointer-events-none" />
+          <div className="fixed inset-0 z-[1] pointer-events-none" style={{background: 'linear-gradient(to bottom, rgba(18,15,23,0.3) 0%, rgba(18,15,23,0.7) 50%, rgba(18,15,23,0.95) 100%)'}} />
         </>
       )}
 
