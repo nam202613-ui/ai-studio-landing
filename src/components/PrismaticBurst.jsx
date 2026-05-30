@@ -107,7 +107,7 @@ void main(){
             cos(marchT * 3.0 + 2.0)
         );
 
-        vec3 base = (0.12 / (0.4 + stepLen))
+        vec3 base = (0.08 / (0.4 + stepLen))
                   * smoothstep(5.0, 0.0, rad)
                   * spectral;
 
