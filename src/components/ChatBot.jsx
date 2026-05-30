@@ -80,67 +80,12 @@ const ChatBot = () => {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="flex h-[calc(100vh-56px)] lg:h-screen">
-      {/* Left Sidebar - Chat History */}
-      <div className="w-64 bg-[#0d0b12] border-r border-white/[0.06] flex-col hidden lg:flex">
-        {/* New Chat Button */}
-        <div className="p-3">
-          <button
-            onClick={startNewChat}
-            className="w-full flex items-center gap-2 bg-[#ff6b00] hover:bg-[#ff7a1a] text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            Cuộc trò chuyện mới
-          </button>
-        </div>
-
-        {/* Chat History */}
-        <div className="flex-1 overflow-y-auto px-2">
-          {chatHistory.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-center px-4">
-              <svg className="w-10 h-10 text-gray-700 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-              </svg>
-              <p className="text-gray-600 text-sm">Chưa có cuộc hội thoại nào</p>
-            </div>
-          ) : (
-            <div className="space-y-0.5 py-1">
-              {chatHistory.map(chat => (
-                <button
-                  key={chat.id}
-                  onClick={() => {
-                    setCurrentChatId(chat.id);
-                    setMessages([]);
-                  }}
-                  className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-colors ${
-                    currentChatId === chat.id
-                      ? 'bg-white/[0.06] text-white'
-                      : 'text-gray-500 hover:text-white hover:bg-white/[0.03]'
-                  }`}
-                >
-                  <div className="truncate font-medium text-[13px]">{chat.title}</div>
-                  <div className="text-[11px] text-gray-600 mt-0.5">{chat.model} • {chat.time}</div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
+    <div className="flex flex-col h-[calc(100vh-56px)]">
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Bar */}
-        <div className="h-14 border-b border-white/[0.06] flex items-center justify-between px-4 shrink-0">
+        <div className="h-12 border-b border-white/[0.06] flex items-center justify-between px-4 shrink-0">
           <div className="flex items-center gap-3">
-            {/* Mobile new chat */}
-            <button onClick={startNewChat} className="lg:hidden text-gray-400 hover:text-white">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-            </button>
-
             {/* Model Selector */}
             <div className="relative">
               <button
@@ -198,23 +143,16 @@ const ChatBot = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Credits */}
-            <div className="flex items-center gap-1.5 text-sm">
-              <span className="text-yellow-500">⚡</span>
-              <span className="text-white font-semibold">0/30</span>
-              <span className="text-[11px] text-gray-500">-1 Credit</span>
-            </div>
-
+          <div className="flex items-center gap-3">
             {/* New Chat */}
             <button
               onClick={startNewChat}
-              className="hidden sm:flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition-colors"
+              className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition-colors"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-              New Chat
+              <span className="hidden sm:inline">New Chat</span>
             </button>
           </div>
         </div>
