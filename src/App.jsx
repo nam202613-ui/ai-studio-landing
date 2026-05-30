@@ -12,7 +12,6 @@ import VideoGenerator from './components/VideoGenerator';
 import RemixVideo from './components/RemixVideo';
 
 const SIDEBAR_ITEMS = [
-  { id: 'home', label: 'Trang chủ', icon: '🏠' },
   { id: 'chat', label: 'Chat AI', icon: '💬' },
   { id: 'image', label: 'Tạo ảnh', icon: '🎨' },
   { id: 'video', label: 'Tạo video', icon: '🎬' },
@@ -21,9 +20,15 @@ const SIDEBAR_ITEMS = [
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isLanding = currentPage === 'home';
+
+  const navigateTo = (page) => {
+    setCurrentPage(page);
+    setMobileMenuOpen(false);
+  };
 
   return (
     <div className="relative min-h-screen bg-[#120F17]">
@@ -39,78 +44,95 @@ function App() {
 
       {/* App Layout */}
       <div className="relative z-10 flex min-h-screen">
-        {/* Sidebar - only on app pages */}
+        {/* Sidebar */}
         {!isLanding && (
           <>
-            {/* Mobile sidebar toggle */}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="fixed top-4 left-4 z-50 lg:hidden bg-white/[0.06] backdrop-blur-xl text-white p-2 rounded-xl border border-white/[0.08]"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
-            </button>
+            {/* Mobile header */}
+            <div className="fixed top-0 left-0 right-0 h-14 bg-[#0d0b12]/95 backdrop-blur-xl border-b border-white/[0.06] flex items-center px-4 z-40 lg:hidden">
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-gray-400 hover:text-white p-1.5"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
+
+              {/* Mobile Logo */}
+              <button onClick={() => navigateTo('home')} className="flex items-center gap-2 ml-3">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-[10px]">AI</span>
+                </div>
+                <span className="text-white font-bold text-sm">Studio</span>
+              </button>
+            </div>
+
+            {/* Mobile overlay */}
+            {mobileMenuOpen && (
+              <div className="fixed inset-0 bg-black/60 z-30 lg:hidden" onClick={() => setMobileMenuOpen(false)} />
+            )}
 
             {/* Sidebar */}
-            <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-[#0d0b12] border-r border-white/[0.06] flex flex-col transition-transform duration-300 ${
-              sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-            }`}>
+            <aside className={`fixed top-0 left-0 z-40 h-full bg-[#0d0b12] border-r border-white/[0.06] flex flex-col transition-all duration-300 ${
+              sidebarCollapsed ? 'w-[68px]' : 'w-60'
+            } ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
               {/* Logo */}
-              <div className="h-16 flex items-center gap-2.5 px-5 border-b border-white/[0.06]">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">AI</span>
-                </div>
-                <span className="text-white font-bold text-base">Studio</span>
+              <div className="h-14 flex items-center border-b border-white/[0.06] shrink-0 px-4">
+                <button onClick={() => navigateTo('home')} className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shrink-0">
+                    <span className="text-white font-bold text-xs">AI</span>
+                  </div>
+                  {!sidebarCollapsed && <span className="text-white font-bold text-base whitespace-nowrap">Studio</span>}
+                </button>
               </div>
 
               {/* Nav Items */}
-              <nav className="flex-1 p-3 space-y-1">
+              <nav className="flex-1 p-2 space-y-1 mt-1">
                 {SIDEBAR_ITEMS.map(item => (
                   <button
                     key={item.id}
-                    onClick={() => {
-                      setCurrentPage(item.id);
-                      setSidebarOpen(false);
-                    }}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                    onClick={() => navigateTo(item.id)}
+                    title={sidebarCollapsed ? item.label : undefined}
+                    className={`w-full flex items-center gap-3 rounded-xl text-sm font-medium transition-all ${
+                      sidebarCollapsed ? 'justify-center px-0 py-3' : 'px-3 py-2.5'
+                    } ${
                       currentPage === item.id
                         ? 'bg-indigo-600/20 text-indigo-400'
                         : 'text-gray-500 hover:text-white hover:bg-white/[0.04]'
                     }`}
                   >
-                    <span className="text-lg">{item.icon}</span>
-                    {item.label}
+                    <span className="text-lg shrink-0">{item.icon}</span>
+                    {!sidebarCollapsed && <span className="whitespace-nowrap">{item.label}</span>}
                   </button>
                 ))}
               </nav>
 
-              {/* Bottom */}
-              <div className="p-3 border-t border-white/[0.06]">
+              {/* Collapse Toggle */}
+              <div className="p-2 border-t border-white/[0.06]">
                 <button
-                  onClick={() => setCurrentPage('home')}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-white hover:bg-white/[0.04] transition-all"
+                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:text-white hover:bg-white/[0.04] transition-all ${
+                    sidebarCollapsed ? 'justify-center px-0' : ''
+                  }`}
+                  title={sidebarCollapsed ? 'Mở rộng' : 'Thu gọn'}
                 >
-                  <span className="text-lg">←</span>
-                  Về trang chủ
+                  <svg className={`w-5 h-5 shrink-0 transition-transform ${sidebarCollapsed ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+                  </svg>
+                  {!sidebarCollapsed && <span>Thu gọn</span>}
                 </button>
               </div>
             </aside>
-
-            {/* Mobile overlay */}
-            {sidebarOpen && (
-              <div className="fixed inset-0 bg-black/60 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
-            )}
           </>
         )}
 
         {/* Main Content */}
-        <main className={`flex-1 ${!isLanding ? 'pt-16 lg:pt-0' : ''}`}>
-          {isLanding && <Navbar onNavigate={setCurrentPage} />}
+        <main className={`flex-1 min-h-screen ${!isLanding ? (sidebarCollapsed ? 'lg:ml-[68px]' : 'lg:ml-60') : ''} ${!isLanding ? 'pt-14 lg:pt-0' : ''}`}>
+          {isLanding && <Navbar onNavigate={navigateTo} />}
 
           {currentPage === 'home' && (
             <>
-              <Hero onNavigate={setCurrentPage} />
+              <Hero onNavigate={navigateTo} />
               <Stats />
               <Features />
               <Pricing />
