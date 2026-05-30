@@ -10,6 +10,11 @@ import ChatBot from './components/ChatBot';
 import ImageGenerator from './components/ImageGenerator';
 import VideoGenerator from './components/VideoGenerator';
 import RemixVideo from './components/RemixVideo';
+import Dashboard from './components/Dashboard';
+import Payments from './components/Payments';
+import MyPrompts from './components/MyPrompts';
+import ImageHistory from './components/ImageHistory';
+import Settings from './components/Settings';
 
 const NAV_ITEMS = [
   { id: 'chat', label: 'Chat AI', icon: '💬' },
@@ -18,15 +23,33 @@ const NAV_ITEMS = [
   { id: 'remix', label: 'Remix video', icon: '🔄' },
 ];
 
+const USER_MENU_ITEMS = [
+  { id: 'dashboard', label: 'Bảng điều khiển', icon: '👤' },
+  { id: 'payments', label: 'Thanh toán', icon: '💳' },
+  { id: 'prompts', label: 'Prompt của tôi', icon: '📝' },
+  { id: 'history', label: 'Lịch sử hình ảnh', icon: '🖼️' },
+  { id: 'settings', label: 'Cài đặt', icon: '⚙️' },
+];
+
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const isLanding = currentPage === 'home';
 
   const navigateTo = (page) => {
     setCurrentPage(page);
+    setShowUserMenu(false);
   };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setShowUserMenu(false);
+    setCurrentPage('home');
+  };
+
+  const isAppPage = !isLanding;
 
   return (
     <div className="relative min-h-screen bg-[#120F17]">
@@ -41,7 +64,7 @@ function App() {
       )}
 
       {/* Top Nav - App Pages */}
-      {!isLanding && (
+      {isAppPage && (
         <nav className="fixed top-0 left-0 right-0 z-50 h-14 bg-[#0d0b12]/95 backdrop-blur-xl border-b border-white/[0.06] flex items-center px-4 gap-4">
           {/* Logo */}
           <button onClick={() => navigateTo('home')} className="flex items-center gap-2 shrink-0">
@@ -120,31 +143,28 @@ function App() {
 
                     {/* Menu Items */}
                     <div className="p-2">
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
-                        <span>👤</span>
-                        Bảng điều khiển
-                      </button>
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
-                        <span>💳</span>
-                        Thanh toán
-                      </button>
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
-                        <span>📝</span>
-                        Prompt của tôi
-                      </button>
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
-                        <span>🖼️</span>
-                        Lịch sử hình ảnh
-                      </button>
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition-colors">
-                        <span>⚙️</span>
-                        Cài đặt
-                      </button>
+                      {USER_MENU_ITEMS.map(item => (
+                        <button
+                          key={item.id}
+                          onClick={() => navigateTo(item.id)}
+                          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-colors ${
+                            currentPage === item.id
+                              ? 'bg-white/[0.06] text-white'
+                              : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                          }`}
+                        >
+                          <span>{item.icon}</span>
+                          {item.label}
+                        </button>
+                      ))}
                     </div>
 
                     {/* Logout */}
                     <div className="p-2 border-t border-white/[0.06]">
-                      <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                      >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
                         </svg>
@@ -160,7 +180,7 @@ function App() {
       )}
 
       {/* Content */}
-      <div className={`${!isLanding ? 'pt-14' : ''}`}>
+      <div className={`${isAppPage ? 'pt-14' : ''}`}>
         {isLanding && <Navbar onNavigate={navigateTo} />}
 
         {currentPage === 'home' && (
@@ -176,6 +196,11 @@ function App() {
         {currentPage === 'image' && <ImageGenerator />}
         {currentPage === 'video' && <VideoGenerator />}
         {currentPage === 'remix' && <RemixVideo />}
+        {currentPage === 'dashboard' && <Dashboard />}
+        {currentPage === 'payments' && <Payments />}
+        {currentPage === 'prompts' && <MyPrompts />}
+        {currentPage === 'history' && <ImageHistory />}
+        {currentPage === 'settings' && <Settings />}
       </div>
     </div>
   );
