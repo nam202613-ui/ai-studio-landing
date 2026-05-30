@@ -71,18 +71,24 @@ function App() {
           </div>
 
           {/* Right */}
-          <div className="ml-auto flex items-center gap-3 shrink-0">
-            <div className="hidden md:flex items-center gap-1.5 text-sm">
+          <div className="ml-auto flex items-center gap-4 shrink-0">
+            {/* Credits */}
+            <div className="flex items-center gap-1.5 text-sm">
               <span className="text-yellow-500">⚡</span>
-              <span className="text-white font-semibold">0/30</span>
-              <span className="text-[11px] text-gray-500">credits</span>
+              <span className="text-gray-400">Credit:</span>
+              <span className="text-white font-semibold">30</span>
             </div>
-            <button
-              onClick={() => navigateTo('home')}
-              className="text-gray-500 hover:text-white text-sm transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+
+            <div className="h-6 w-px bg-white/[0.08]" />
+
+            {/* User */}
+            <button className="flex items-center gap-2 hover:bg-white/[0.04] px-2 py-1.5 rounded-xl transition-colors">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                N
+              </div>
+              <span className="text-white text-sm font-medium hidden sm:block">Nam</span>
+              <svg className="w-4 h-4 text-gray-500 hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
               </svg>
             </button>
           </div>
