@@ -1,4 +1,4 @@
-const Hero = () => {
+const Hero = ({ onNavigate }) => {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6">
       <div className="relative z-10 max-w-4xl mx-auto">
@@ -24,12 +24,12 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#pricing"
+          <button
+            onClick={() => onNavigate?.('chat')}
             className="w-full sm:w-auto bg-white text-black px-8 py-3.5 rounded-full font-bold text-sm hover:bg-gray-200 transition-all hover:scale-105 active:scale-95"
           >
             Bắt đầu miễn phí
-          </a>
+          </button>
           <a
             href="#features"
             className="w-full sm:w-auto bg-white/[0.08] text-white px-8 py-3.5 rounded-full font-bold text-sm border border-white/[0.08] hover:bg-white/[0.15] transition-all"
