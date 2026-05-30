@@ -415,44 +415,8 @@ const ChatBot = () => {
         {/* Messages or Welcome */}
         {!hasMessages ? (
           <div className="flex-1 flex flex-col items-center justify-center px-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Xin chào, Nam.</h1>
-            <p className="text-gray-500 text-base mb-8">Chọn một mô hình để bắt đầu đoạn chat mới.</p>
-            <p className="text-gray-600 text-sm mb-6">Đang hiển thị {ALL_MODELS.length} mô hình</p>
-
-            {/* Model Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full max-w-5xl">
-              {ALL_MODELS.slice(0, 15).map(model => (
-                <button
-                  key={model.id}
-                  onClick={() => {
-                    const provider = AI_PROVIDERS.find(p => p.models.some(m => m.id === model.id));
-                    if (provider) selectModel(provider, model);
-                    document.querySelector('.chat-input')?.focus();
-                  }}
-                  className={`flex items-center gap-3 p-4 rounded-2xl border text-left transition-all ${
-                    selectedModel.id === model.id
-                      ? 'bg-[#1e1a2e] border-[#ff6b00]/40 ring-1 ring-[#ff6b00]/20'
-                      : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04] hover:border-white/[0.1]'
-                  }`}
-                >
-                  <span className="text-gray-500 shrink-0">{model.providerLogo ? <model.providerLogo /> : '⚙️'}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-white font-semibold text-sm">{model.name}</span>
-                      {model.badge && <span className="text-xs">{model.badge}</span>}
-                    </div>
-                    <div className="text-[11px] text-gray-500 truncate mt-0.5">{model.desc}</div>
-                  </div>
-                  {selectedModel.id === model.id && (
-                    <div className="w-5 h-5 rounded-full bg-[#ff6b00] flex items-center justify-center shrink-0">
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  )}
-                </button>
-              ))}
-            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Xin chào, Nam. ヾ(≧▽≦*)o</h1>
+            <p className="text-gray-500 text-base">Chọn một mô hình để bắt đầu đoạn chat mới.</p>
           </div>
         ) : (
           <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-4 space-y-4">
