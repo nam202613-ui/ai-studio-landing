@@ -4,11 +4,11 @@ const Hero = ({ onNavigate }) => {
       <div className="relative z-10 max-w-4xl mx-auto">
         <a
           href="#"
-          className="inline-flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/[0.08] rounded-full px-4 py-1.5 mb-8 text-sm text-gray-400 hover:bg-white/[0.12] transition-colors"
+          className="inline-flex items-center gap-2 bg-white/[0.1] backdrop-blur-sm border border-white/[0.1] rounded-full px-4 py-1.5 mb-8 text-sm text-gray-300 hover:bg-white/[0.15] transition-colors"
         >
-          <span className="text-white">Mới</span>
+          <span className="text-white font-semibold">Mới</span>
           <span>Tạo ảnh & video AI phiên bản 2.0 đã ra mắt</span>
-          <span className="text-gray-500">→</span>
+          <span className="text-gray-400">→</span>
         </a>
 
         <h1 className="text-6xl md:text-8xl lg:text-[110px] font-extrabold text-white leading-[0.95] tracking-tight mb-8">
@@ -18,7 +18,7 @@ const Hero = ({ onNavigate }) => {
           </span>
         </h1>
 
-        <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed">
           Các công cụ AI mạnh mẽ, giúp dự án sáng tạo của bạn thực sự nổi bật.
           Tạo ảnh và video tuyệt đẹp chỉ trong vài giây.
         </p>
@@ -32,7 +32,7 @@ const Hero = ({ onNavigate }) => {
           </button>
           <a
             href="#features"
-            className="w-full sm:w-auto bg-white/[0.08] text-white px-8 py-3.5 rounded-full font-bold text-sm border border-white/[0.08] hover:bg-white/[0.15] transition-all"
+            className="w-full sm:w-auto bg-white/[0.1] text-white px-8 py-3.5 rounded-full font-bold text-sm border border-white/[0.12] hover:bg-white/[0.18] transition-all"
           >
             Tìm hiểu thêm
           </a>

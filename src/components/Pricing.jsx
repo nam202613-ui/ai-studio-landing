@@ -59,19 +59,19 @@ const Pricing = () => {
         <h2 className="text-3xl md:text-4xl font-extrabold text-white text-center mb-4">
           Đầu tư cho sự sáng tạo
         </h2>
-        <p className="text-gray-500 text-center mb-12 max-w-lg mx-auto">
+        <p className="text-gray-300 text-center mb-12 max-w-lg mx-auto">
           Bắt đầu miễn phí, nâng cấp khi bạn cần nhiều hơn.
         </p>
 
         <div className="flex items-center justify-center gap-3 mb-12">
-          <span className={`text-sm ${!annual ? 'text-white' : 'text-gray-500'}`}>Hàng tháng</span>
+          <span className={`text-sm ${!annual ? 'text-white' : 'text-gray-400'}`}>Hàng tháng</span>
           <button
             onClick={() => setAnnual(!annual)}
-            className={`relative w-12 h-6 rounded-full transition-colors ${annual ? 'bg-indigo-500' : 'bg-gray-700'}`}
+            className={`relative w-12 h-6 rounded-full transition-colors ${annual ? 'bg-indigo-500' : 'bg-gray-600'}`}
           >
             <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${annual ? 'left-[26px]' : 'left-0.5'}`} />
           </button>
-          <span className={`text-sm ${annual ? 'text-white' : 'text-gray-500'}`}>
+          <span className={`text-sm ${annual ? 'text-white' : 'text-gray-400'}`}>
             Hàng năm
             <span className="ml-1.5 text-xs text-green-400 font-bold">-20%</span>
           </span>
@@ -87,8 +87,8 @@ const Pricing = () => {
                 key={i}
                 className={`relative p-6 rounded-2xl transition-all ${
                   plan.popular
-                    ? 'bg-white/[0.06] border-2 border-indigo-500/40'
-                    : 'bg-white/[0.02] border border-white/[0.06]'
+                    ? 'bg-white/[0.1] border-2 border-indigo-500/50'
+                    : 'bg-white/[0.06] border border-white/[0.1]'
                 }`}
               >
                 {plan.popular && (
@@ -97,18 +97,18 @@ const Pricing = () => {
                   </div>
                 )}
 
-                <div className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">{plan.name}</div>
+                <div className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-1">{plan.name}</div>
                 <div className="text-3xl font-extrabold text-white mb-1">{display}</div>
-                {plan.price > 0 && <div className="text-sm text-gray-500 mb-4">/tháng</div>}
-                {plan.price === 0 && <div className="text-sm text-gray-500 mb-4">{plan.description}</div>}
+                {plan.price > 0 && <div className="text-sm text-gray-400 mb-4">/tháng</div>}
+                {plan.price === 0 && <div className="text-sm text-gray-400 mb-4">{plan.description}</div>}
 
-                <div className="inline-flex items-center gap-1.5 bg-yellow-500/10 text-yellow-400 text-xs font-bold px-2.5 py-1 rounded-full mb-6">
+                <div className="inline-flex items-center gap-1.5 bg-yellow-500/15 text-yellow-300 text-xs font-bold px-2.5 py-1 rounded-full mb-6">
                   {plan.credits.toLocaleString()} credits / tháng
                 </div>
 
                 <ul className="space-y-2.5 mb-6">
                   {plan.features.map((f, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm text-gray-400">
+                    <li key={j} className="flex items-start gap-2 text-sm text-gray-200">
                       <svg className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -121,7 +121,7 @@ const Pricing = () => {
                   className={`w-full py-2.5 rounded-xl font-bold text-sm transition-all ${
                     plan.popular
                       ? 'bg-white text-black hover:bg-gray-200'
-                      : 'bg-white/[0.06] text-white hover:bg-white/[0.12]'
+                      : 'bg-white/[0.1] text-white hover:bg-white/[0.18]'
                   }`}
                 >
                   {plan.cta}

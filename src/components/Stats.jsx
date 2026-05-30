@@ -12,7 +12,7 @@ const Stats = () => {
         {stats.map((stat, i) => (
           <div key={i} className="text-center">
             <div className="text-4xl md:text-5xl font-extrabold text-white mb-2">{stat.value}</div>
-            <div className="text-sm text-gray-500 font-medium">{stat.label}</div>
+            <div className="text-sm text-gray-300 font-medium">{stat.label}</div>
           </div>
         ))}
       </div>
